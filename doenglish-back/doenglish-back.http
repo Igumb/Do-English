@@ -1,0 +1,6 @@
+@doenglish_back_HostAddress = http://localhost:5265
+
+GET {{doenglish_back_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

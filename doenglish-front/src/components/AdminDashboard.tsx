@@ -15,6 +15,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ userName, onLogout }) =
     { id: 'students', label: 'Alunos', icon: BookOpen },
     { id: 'content', label: 'Conteúdos', icon: BookOpen },
     { id: 'schedule', label: 'Horários', icon: Calendar },
+    { id: 'reports', label: 'Relatório Aulas', icon: Calendar },
+    { id: 'products', label: 'Produtos', icon: BookOpen },
   ];
 
   const teachers = [
@@ -93,8 +95,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ userName, onLogout }) =
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {stats.map((stat, index) => {
                     const Icon = stat.icon;
+                    
+                    // Determinar para qual aba redirecionar baseado no label
+                    const getTargetTab = (label: string) => {
+                      switch (label) {
+                        case 'Professores Ativos': return 'teachers';
+                        case 'Alunos Matriculados': return 'students';
+                        case 'Aulas Este Mês': return 'reports';
+                        case 'eBooks Vendidos': return 'products';
+                        default: return null;
+                      }
+                    };
+                    
+                    const targetTab = getTargetTab(stat.label);
+                    
                     return (
-                      <div key={index} className="bg-white rounded-xl shadow-sm p-6">
+                      <div 
+                        key={index} 
+                        className={`bg-white rounded-xl shadow-sm p-6 ${
+                          targetTab ? 'cursor-pointer hover:shadow-md transition-shadow' : ''
+                        }`}
+                        onClick={() => {
+                          if (targetTab) {
+                            setActiveTab(targetTab);
+                          }
+                        }}
+                      >
                         <div className="flex items-center">
                           <div className={`${stat.color} p-3 rounded-lg`}>
                             <Icon className="w-6 h-6 text-white" />
@@ -184,6 +210,156 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ userName, onLogout }) =
                             </td>
                           </tr>
                         ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'reports' && (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h1 className="text-3xl font-bold text-gray-900">Relatório de Aulas</h1>
+                  <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                    <Plus className="w-4 h-4" />
+                    Exportar Relatório
+                  </button>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Estatísticas de Aulas - Este Mês</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h3 className="text-lg font-semibold text-blue-900">Total de Aulas</h3>
+                      <p className="text-3xl font-bold text-blue-600">456</p>
+                    </div>
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <h3 className="text-lg font-semibold text-green-900">Aulas Concluídas</h3>
+                      <p className="text-3xl font-bold text-green-600">432</p>
+                    </div>
+                    <div className="bg-amber-50 p-4 rounded-lg">
+                      <h3 className="text-lg font-semibold text-amber-900">Taxa de Conclusão</h3>
+                      <p className="text-3xl font-bold text-amber-600">94.7%</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Aulas por Professor</h2>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="font-semibold text-gray-900">Sarah Johnson</p>
+                        <p className="text-sm text-gray-600">Business English</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-blue-600">89</p>
+                        <p className="text-sm text-gray-600">aulas</p>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="font-semibold text-gray-900">Michael Davis</p>
+                        <p className="text-sm text-gray-600">Conversation</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-blue-600">124</p>
+                        <p className="text-sm text-gray-600">aulas</p>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                      <div>
+                        <p className="font-semibold text-gray-900">Emma Wilson</p>
+                        <p className="text-sm text-gray-600">Grammar</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-blue-600">98</p>
+                        <p className="text-sm text-gray-600">aulas</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'products' && (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h1 className="text-3xl font-bold text-gray-900">Gestão de Produtos</h1>
+                  <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                    <Plus className="w-4 h-4" />
+                    Novo Produto
+                  </button>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produto</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendas</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        <tr className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">eBook - Inglês para Viagem</div>
+                            <div className="text-sm text-gray-500">Guia completo para viagens</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                              eBook
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            R$ 29,90
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            89 vendas
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex gap-2">
+                              <button className="text-red-600 hover:text-red-900">
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button className="text-red-600 hover:text-red-900">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">Curso - Gramática Básica</div>
+                            <div className="text-sm text-gray-500">Fundamentos da gramática inglesa</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              Curso
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            R$ 99,90
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            156 vendas
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex gap-2">
+                              <button className="text-red-600 hover:text-red-900">
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button className="text-red-600 hover:text-red-900">
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>

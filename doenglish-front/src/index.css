@@ -2,7 +2,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "tailwindcss";
 
 :root {
   --border: 0 0% 90%; /* por exemplo: hsl(0 0% 90%) = cinza claro */

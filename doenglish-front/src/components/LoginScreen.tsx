@@ -1,42 +1,31 @@
 import React, { useState } from 'react';
 import { BookOpen, Users, GraduationCap, LogIn } from 'lucide-react';
-import { UserType } from '../App';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../app/context/AuthContext';
+import type { UserType } from '../types/user';
 
 interface LoginScreenProps {
-  onLogin: (userType: UserType, name: string) => void;
+  onLogin?: (userType: UserType, name: string) => void;
 }
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const [selectedRole, setSelectedRole] = useState<UserType>(null);
   const [name, setName] = useState('');
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const roles = [
-    {
-      type: 'admin' as UserType,
-      title: 'Administrador',
-      description: 'Gerencie professores, alunos e conteúdos',
-      icon: Users,
-      color: 'bg-red-500 hover:bg-red-600'
-    },
-    {
-      type: 'teacher' as UserType,
-      title: 'Professor',
-      description: 'Ensine e acompanhe seus alunos',
-      icon: GraduationCap,
-      color: 'bg-red-500 hover:bg-red-600'
-    },
-    {
-      type: 'student' as UserType,
-      title: 'Aluno',
-      description: 'Aprenda inglês de forma prática',
-      icon: BookOpen,
-      color: 'bg-red-500 hover:bg-red-600'
-    }
+    { type: 'admin' as UserType, title: 'Administrador', description: 'Gerencie professores, alunos e conteúdos', icon: Users, color: 'bg-red-500 hover:bg-red-600' },
+    { type: 'teacher' as UserType, title: 'Professor', description: 'Ensine e acompanhe seus alunos', icon: GraduationCap, color: 'bg-red-500 hover:bg-red-600' },
+    { type: 'student' as UserType, title: 'Aluno', description: 'Aprenda inglês de forma prática', icon: BookOpen, color: 'bg-red-500 hover:bg-red-600' },
   ];
 
   const handleLogin = () => {
     if (selectedRole && name.trim()) {
-      onLogin(selectedRole, name);
+      login(selectedRole, name);
+      if (onLogin) onLogin(selectedRole, name);
+      const path = selectedRole === 'admin' ? '/admin' : selectedRole === 'teacher' ? '/teacher' : '/student';
+      navigate(path, { replace: true });
     }
   };
 
@@ -50,7 +39,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
             </div>
           </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Do!<span className="text-red-500">English</span>
+            English<span className="text-red-500">Flow</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Aprenda inglês de forma moderna, prática e descontraída. 

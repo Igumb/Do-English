@@ -62,3 +62,4 @@ D:\projects\doenglish\doenglish-back\obj\Debug\net9.0\refint\doenglish-back.dll
 D:\projects\doenglish\doenglish-back\obj\Debug\net9.0\doenglish-back.pdb
 D:\projects\doenglish\doenglish-back\obj\Debug\net9.0\doenglish-back.genruntimeconfig.cache
 D:\projects\doenglish\doenglish-back\obj\Debug\net9.0\ref\doenglish-back.dll
+D:\projects\doenglish\doenglish-back\obj\Debug\net9.0\doenglish-back.sourcelink.json
